@@ -20,6 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/rent/car', [ApiRentCarController::class, 'rentCar'])->name('rentcar.api');
-
 Route::get('/terminate/rentcar', [ApiRentCarController::class, 'terminateRent'])->name('terminate.rent.api');
 
