@@ -14,6 +14,8 @@ use Illuminate\Http\Client\HttpClientException;
 class ApiRentCarController extends Controller
 {
     /**
+     * Регистрация аренды автомобиля пользователем, если это разрешено правилами
+     *
      * @throws HttpClientException
      */
     public function rentCar(RentCarRequest $request)
