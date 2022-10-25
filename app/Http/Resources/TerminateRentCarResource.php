@@ -17,8 +17,8 @@ class TerminateRentCarResource extends JsonResource
         return [
             'message' => sprintf('Пользователь %s перестал арендовать автомобиль %s %s с номером %s',
                 $this['user']->name,
-                $this['car']->model->brand->name,
-                $this['car']->model->name,
+                $this['car']->model->brand->brand_name,
+                $this['car']->model->model_name,
                 $this['car']->number,
             ),
         ];

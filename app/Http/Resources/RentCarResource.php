@@ -17,7 +17,7 @@ class RentCarResource extends JsonResource
         return [
             'message' => sprintf('Пользователь %s арендовал автомобиль %s %s с номером %s',
                 $this->users->first()->name,
-                $this->model->brand->name,
+                $this->model->brand->brand_name,
                 $this->model->name,
                 $this->number,
             ),

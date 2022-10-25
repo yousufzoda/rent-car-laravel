@@ -42,10 +42,47 @@
         </div>
         <br>
         <div class="row">
-            <input type="button" value="Арендовать автомобиль">
+            <input type="button" onclick="rentCar()" value="Арендовать автомобиль">
         </div>
     </form>
 </div>
 <div id="response"></div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+        function rentCar() {
+            $.ajax({
+                url: "{{ route('rentcar.api') }}",
+                method: 'GET',
+                data: {
+                    car_id: $('#car').val(),
+                    user_id: $('#user').val()
+                },
+                success: function(response) {
+                    console.log(response);
+                    $("#response").html(response.data.message);
+                },
+                error: function(jqxhr) {
+                    $("#response").html('');
+                    let messages = jQuery.parseJSON(jqxhr.responseText).errors.messages;
+
+                    jQuery.each( messages, function( i, val ) {
+                        $("#response").append('Ошибка ' + ++i + ': ' + val + '<br>');
+                    });
+                }
+            });
+        }
+
+        $("#rentBtn").click(function(e) {
+            e.preventDefault();
+            rentCar();
+        });
+
+</script>
 </html>
