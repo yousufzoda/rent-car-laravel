@@ -18,10 +18,8 @@ return new class extends Migration
         Schema::create('car_user', function (Blueprint $table) {
             $table->bigInteger('car_id')->unsigned();
             $table->foreign('car_id')->references('id')->on('cars')->restrictOnDelete();
-
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->restrictOnDelete();
-            $table->timestamps();
         });
     }
 

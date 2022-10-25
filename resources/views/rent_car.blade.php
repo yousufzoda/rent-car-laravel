@@ -8,6 +8,8 @@
 
     <!-- Fonts -->
     <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link href="{{ asset('assets/style.css') }}" rel="stylesheet">
     <!-- CSS only -->
 
@@ -17,39 +19,48 @@
     <form>
         @csrf
         <div class="row">
-            <div class="col-25">
-                <label for="country">Выберите автомобиль</label>
+            <div class="col-md-12">
+
+                <div class="col-md-12">
+                    <label for="car">Выберите автомобиль</label>
+                    <select id="car">
+                        @foreach($cars as $car)
+                            <option value="{{ $car->id }}">{{$car->model->brand->brand_name .' '. $car->model->model_name. ' (номер: '.$car->number.')' }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="user">Выберите пользователя</label>
+                    <select id="user">
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <br>
+                <div class="col-md-12">
+                <div class="alert alert-primary mt-1" role="alert" id="alert-success" style="display: none">
+                    <div class="alert-body" id="response"><strong><span id="response"></span></strong></div>
+                </div>
+                </div>
             </div>
-            <div class="col-75">
-                <label for="car">Автомобиль</label>
-                <select id="car">
-                    @foreach($cars as $car)
-                        <option value="{{ $car->id }}">{{$car->model->brand->brand_name .' '. $car->model->model_name. ' (номер: '.$car->number.')' }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-25">
-                <label for="country">Выберите пользователь</label>
-            </div>
-            <div class="col-75">
-                <label for="user">Пользователь</label>
-                <select id="user">
-                    @foreach($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+
         </div>
         <br>
         <div class="row">
-            <input type="button" onclick="rentCar()" value="Арендовать автомобиль">
+            <div class="col-md-12">
+                <input type="button" class="btn btn-success" onclick="rentCar()" value="Арендовать автомобиль">
+            </div>
         </div>
     </form>
 </div>
-<div id="response"></div>
+
+
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <script>
     $.ajaxSetup({
         headers: {
@@ -66,15 +77,24 @@
                 },
                 success: function(response) {
                     console.log(response);
-                    $("#response").html(response.data.message);
-                },
-                error: function(jqxhr) {
-                    $("#response").html('');
-                    let messages = jQuery.parseJSON(jqxhr.responseText).errors.messages;
+                    if(response.status === false){
+                        hideAlert();
+                        //$("#response").html(response.message);
+                        $('#response').text(response.message);
+                        $('#alert-success').show();
+                    }else{
+                        hideAlert();
+                       // $("#response").html(response.data.message);
+                        $('#response').text(response.data.message);
+                        $('#alert-success').show();
 
-                    jQuery.each( messages, function( i, val ) {
-                        $("#response").append('Ошибка ' + ++i + ': ' + val + '<br>');
-                    });
+                    }
+
+                    //$("#response").html(response.data.message);
+                },
+                error: function(msg) {
+                    $("#response").html('');
+                    console.log(msg);
                 }
             });
         }
@@ -83,6 +103,12 @@
             e.preventDefault();
             rentCar();
         });
+
+    let alert = $('.alert');
+
+    function hideAlert(){
+        alert.hide();
+    }
 
 </script>
 </html>

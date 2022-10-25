@@ -11,6 +11,9 @@ class RentCarController extends Controller
         $users = User::all();
         $cars = Car::all();
 
+        $user = User::with('cars')->where('id', 1)->get();
+       // return $user;
+
         return view('rent_car', compact('users', 'cars'));
     }
 }
